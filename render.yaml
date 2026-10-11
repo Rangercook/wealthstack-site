@@ -1,0 +1,30 @@
+# Provision only after reviewing the paid-plan charges in Render.
+services:
+  - type: web
+    name: moneyprinterturbo-production
+    runtime: docker
+    plan: 2c-4g
+    region: oregon
+    healthCheckPath: /healthz
+    autoDeploy: false
+    disk:
+      name: mpt-durable-data
+      mountPath: /data
+      sizeGB: 10
+    envVars:
+      - key: MPT_WORKER_API_TOKEN
+        generateValue: true
+      - key: MPT_REQUIRE_PERSISTENT_DISK
+        value: "1"
+      - key: MPT_DATA_DIR
+        value: /data
+      - key: MPT_ROOT
+        value: /opt/mpt
+      - key: MPT_STARTER_DIR
+        value: /opt/worker/starter
+      - key: MPT_MAX_DISK_BYTES
+        value: "8589934592"
+      - key: MPT_JOB_TIMEOUT_SECONDS
+        value: "2400"
+      - key: MPT_DEFAULT_VOICE
+        value: en-US-JennyNeural-Female
